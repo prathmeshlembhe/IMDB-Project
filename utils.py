@@ -1,10 +1,14 @@
+# Importing necessary libraries
 import csv,requests
 import pandas as pd
 import streamlit as st
+
+# Class and methods required for IMDB Movies Data collection
 class api_extracter:
 
     def __init__(self):
-        self.api_key =st.secrets["API_KEY"]
+        self.api_key = st.secrets["API_KEY"]
+
     def get_data(self):
         url = "https://imdb232.p.rapidapi.com/api/title/get-most-popular"
 
@@ -16,11 +20,10 @@ class api_extracter:
         }
 
         response = requests.get(url, headers=headers, params=querystring)
-
         #print(response.json())
         data = response.json()
 
-        nodes = data.get("data").get("topMeterTitles").get("edges")
+        nodes = data.get("data",{}).get("topMeterTitles",{}).get("edges",[])
         top_movie_data = []
         for node in nodes:
             nd = node.get("node",{})
